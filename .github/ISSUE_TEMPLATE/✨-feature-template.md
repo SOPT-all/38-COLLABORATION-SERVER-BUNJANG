@@ -1,17 +1,8 @@
 ---
-name: "✨Feature Template"
-about: 새로운 기능을 개발하기 위한 템플릿입니다.
-title: ''
-labels: ''
-assignees: ''
-
----
-
----
-name: "✨ [FEAT] 기능 이름"
+name: "✨ Feature Template"
 about: 새로운 기능을 개발할 때 사용합니다.
-title: "[Feat] "
-labels: "✨ FEAT"
+title: "✨ [FEAT] 기능 이름"
+labels: ''
 assignees: ''
 
 ---
