@@ -2,7 +2,7 @@
 name: "✨ Feature Template"
 about: 새로운 기능을 개발할 때 사용합니다.
 title: "✨ [FEAT] 기능 이름"
-labels: ''
+labels: "✨ FEAT"
 assignees: ''
 
 ---
