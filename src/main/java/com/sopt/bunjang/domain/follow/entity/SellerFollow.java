@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(
+        uniqueConstraints = @UniqueConstraint(columnNames = {"follower_id", "seller_id"})
+)
 public class SellerFollow {
 
     @Id
