@@ -48,15 +48,15 @@ public class Product extends BaseEntity {
 
     @ColumnDefault("0")
     @Column(nullable = false)
-    private Integer viewCount;
+    private Integer viewCount = 0;
 
     @ColumnDefault("0")
     @Column(nullable = false)
-    private Integer chatCount;
+    private Integer chatCount = 0;
 
     @ColumnDefault("0")
     @Column(nullable = false)
-    private Integer likeCount;
+    private Integer likeCount = 0;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
