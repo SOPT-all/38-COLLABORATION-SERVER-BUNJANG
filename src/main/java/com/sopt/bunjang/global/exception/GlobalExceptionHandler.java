@@ -1,8 +1,8 @@
 package com.sopt.bunjang.global.exception;
 
-
 import com.sopt.bunjang.global.response.CommonResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -12,19 +12,33 @@ public class GlobalExceptionHandler {
 
     // CustomException
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<CommonResponse<Void>> handleCustomException(CustomException e){
+    public ResponseEntity<CommonResponse<Void>> handleCustomException(CustomException e) {
         ErrorCode errorCode = e.getErrorCode();
 
         return ResponseEntity
                 .status(errorCode.getStatus())
-                .body(CommonResponse.fail(errorCode.getMessage()));
+                .body(CommonResponse.fail(errorCode));
+    }
+
+    // PathVariable, QueryString 타입 변환 실패
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<CommonResponse<Void>> handleMethodArgumentTypeMismatchException(
+            MethodArgumentTypeMismatchException e
+    ) {
+        ErrorCode errorCode = ErrorCode.INVALID_INPUT_VALUE;
+
+        return ResponseEntity
+                .status(errorCode.getStatus())
+                .body(CommonResponse.fail(errorCode));
     }
 
     // 예상치 못한 예외
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<CommonResponse<Void>> handleException(Exception e){
+    public ResponseEntity<CommonResponse<Void>> handleException(Exception e) {
+        ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
+
         return ResponseEntity
-                .status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus())
-                .body(CommonResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR.getMessage()));
+                .status(errorCode.getStatus())
+                .body(CommonResponse.fail(errorCode));
     }
 }

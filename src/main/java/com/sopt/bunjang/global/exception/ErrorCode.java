@@ -22,6 +22,8 @@ public enum ErrorCode {
         this.message = message;
     }
 
+    public String getCode() { return name(); }
+
     public HttpStatus getStatus() {
         return status;
     }
