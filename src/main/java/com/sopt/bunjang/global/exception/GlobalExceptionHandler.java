@@ -2,6 +2,7 @@ package com.sopt.bunjang.global.exception;
 
 import com.sopt.bunjang.global.response.CommonResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -25,7 +26,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<CommonResponse<Void>> handleMethodArgumentTypeMismatchException(
             MethodArgumentTypeMismatchException e
     ) {
-        ErrorCode errorCode = ErrorCode.INVALID_INPUT_VALUE;
+        ErrorCode errorCode = ErrorCode.INVALID_REQUEST;
+
+        return ResponseEntity
+                .status(errorCode.getStatus())
+                .body(CommonResponse.fail(errorCode));
+    }
+
+    // 필수 QueryString 누락
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<CommonResponse<Void>> handleMissingServletRequestParameterException(
+            MissingServletRequestParameterException e
+    ) {
+        ErrorCode errorCode = ErrorCode.INVALID_REQUEST;
 
         return ResponseEntity
                 .status(errorCode.getStatus())
