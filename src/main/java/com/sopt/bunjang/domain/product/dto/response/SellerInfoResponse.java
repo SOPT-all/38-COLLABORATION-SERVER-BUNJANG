@@ -26,6 +26,7 @@ public record SellerInfoResponse(
         @Schema(example = "false")
         Boolean isFollowing,
 
+        @Schema(description = "판매자의 다른 상품 목록")
         List<SellerProductResponse> sellerProducts
 ){
 }

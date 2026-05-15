@@ -10,6 +10,9 @@ public record ProductDetailSuccessResponse(
         @Schema(example = "true")
         boolean isSuccess,
 
+        @Schema(example = "PRODUCT_DETAIL_FETCH_SUCCESS")
+        String code,
+
         @Schema(example = "상품 상세 조회에 성공했습니다.")
         String message,
 

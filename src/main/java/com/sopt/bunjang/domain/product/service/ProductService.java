@@ -35,7 +35,7 @@ public class ProductService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        Product product = productRepository.findById(productId)
+        Product product = productRepository.findByIdWithSeller(productId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
 
         User seller = product.getSeller();
@@ -50,9 +50,8 @@ public class ProductService {
         boolean isFollowing = sellerFollowRepository.existsByFollowerIdAndSellerId(user.getId(), seller.getId());
 
         List<SellerProductResponse> sellerProducts = productRepository
-                .findAllBySellerId(seller.getId())
+                .findTop4BySellerIdAndIdNotOrderByCreatedAtDesc(seller.getId(), product.getId())
                 .stream()
-                .limit(4)
                 .map(sellerProduct -> new SellerProductResponse(
                         sellerProduct.getId(),
                         sellerProduct.getThumbnailUrl(),

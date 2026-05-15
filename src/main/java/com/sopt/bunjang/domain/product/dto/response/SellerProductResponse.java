@@ -2,7 +2,7 @@ package com.sopt.bunjang.domain.product.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-// 상세 페이지 - 판매자
+// 판매자 정보
 public record SellerProductResponse(
         @Schema(example = "1")
         Long productId,

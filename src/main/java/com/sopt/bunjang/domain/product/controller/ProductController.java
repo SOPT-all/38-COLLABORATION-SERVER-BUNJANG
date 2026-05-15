@@ -3,6 +3,7 @@ package com.sopt.bunjang.domain.product.controller;
 import com.sopt.bunjang.domain.product.dto.response.ProductDetailResponse;
 import com.sopt.bunjang.domain.product.dto.response.swagger.ProductDetailSuccessResponse;
 import com.sopt.bunjang.domain.product.service.ProductService;
+import com.sopt.bunjang.global.response.CommonErrorResponse;
 import com.sopt.bunjang.global.response.CommonResponse;
 import com.sopt.bunjang.global.response.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,9 +47,11 @@ public class ProductController {
                     description = "잘못된 요청입니다.",
                     content = @Content(
                             mediaType = "application/json",
+                            schema = @Schema(implementation = CommonErrorResponse.class),
                             examples = @ExampleObject(value = """
                                     {
                                       "isSuccess": false,
+                                      "code": "INVALID_REQUEST",
                                       "message": "잘못된 요청입니다.",
                                       "data": null
                                     }
@@ -61,12 +64,14 @@ public class ProductController {
                     description = "상품 또는 사용자를 찾을 수 없습니다.",
                     content = @Content(
                             mediaType = "application/json",
+                            schema = @Schema(implementation = CommonErrorResponse.class),
                             examples = {
                                     @ExampleObject(
                                             name = "존재하지 않는 상품",
                                             value = """
                                                     {
                                                       "isSuccess": false,
+                                                      "code": "PRODUCT_NOT_FOUND",
                                                       "message": "상품을 찾을 수 없습니다.",
                                                       "data": null
                                                     }
@@ -77,6 +82,7 @@ public class ProductController {
                                             value = """
                                                     {
                                                       "isSuccess": false,
+                                                      "code": "USER_NOT_FOUND",
                                                       "message": "사용자를 찾을 수 없습니다.",
                                                       "data": null
                                                     }
@@ -91,9 +97,11 @@ public class ProductController {
                     description = "서버 내부 오류가 발생했습니다.",
                     content = @Content(
                             mediaType = "application/json",
+                            schema = @Schema(implementation = CommonErrorResponse.class),
                             examples = @ExampleObject(value = """
                                     {
                                       "isSuccess": false,
+                                      "code": "INTERNAL_SERVER_ERROR",
                                       "message": "서버 내부 오류가 발생했습니다.",
                                       "data": null
                                     }
@@ -114,7 +122,7 @@ public class ProductController {
         ProductDetailResponse response = productService.getProductDetail(productId, userId);
         return ResponseEntity.ok(
                 CommonResponse.success(
-                    SuccessCode.PRODUCT_DETAIL_FETCH_SUCCESS.getMessage(), response
+                    SuccessCode.PRODUCT_DETAIL_FETCH_SUCCESS, response
                 )
         );
     }
