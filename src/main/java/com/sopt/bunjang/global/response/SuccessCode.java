@@ -21,6 +21,8 @@ public enum SuccessCode {
         this.message = message;
     }
 
+    public String getCode() { return name(); }
+
     public String getMessage() {
         return message;
     }
