@@ -1,6 +1,7 @@
 package com.sopt.bunjang.domain.productlike.controller;
 
 import com.sopt.bunjang.domain.productlike.dto.response.ProductLikeToggleResponse;
+import com.sopt.bunjang.domain.productlike.dto.response.swagger.ProductLikeToggleSuccessResponse;
 import com.sopt.bunjang.domain.productlike.service.ProductLikeService;
 import com.sopt.bunjang.global.response.CommonErrorResponse;
 import com.sopt.bunjang.global.response.CommonResponse;
@@ -29,7 +30,7 @@ public class ProductLikeController {
             summary = "상품 찜 버튼 토글",
             description = """
                     홈 화면, 상품 상세 페이지, 거래 완료 화면에서 사용하는 상품 찜 버튼 토글 API입니다.
-
+                    
                     이미 찜한 상품이면 찜을 취소하고, 찜하지 않은 상품이면 찜을 추가합니다.
                     isLiked는 토글 처리 이후의 최종 찜 상태를 의미합니다.
                     """
@@ -37,7 +38,11 @@ public class ProductLikeController {
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    description = "상품 찜 상태 변경 성공"
+                    description = "상품 찜 상태 변경 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ProductLikeToggleSuccessResponse.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "400",
