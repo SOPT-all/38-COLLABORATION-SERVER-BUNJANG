@@ -55,7 +55,7 @@ public class HomeService {
         );
 
         // 전체 개수에서 현재 보여주는 개수를 빼서 더보기 카운트 계산
-        Integer remainingCount = productRepository.countBySectionType(SectionType.RECENT_CATEGORY) - RECENT_CATEGORY_LIMIT;
+        Integer remainingCount = Math.max(0, productRepository.countBySectionType(SectionType.RECENT_CATEGORY) - RECENT_CATEGORY_LIMIT);
 
         return new HomeResponse(
                 buildRecentCategoryProducts(user.getNickname(), recentCategoryList, likedProductIds, remainingCount),
