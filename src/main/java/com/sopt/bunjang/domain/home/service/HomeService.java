@@ -1,9 +1,6 @@
 package com.sopt.bunjang.domain.home.service;
 
-import com.sopt.bunjang.domain.home.dto.response.AdProductsResponse;
 import com.sopt.bunjang.domain.home.dto.response.HomeResponse;
-import com.sopt.bunjang.domain.home.dto.response.RecentCategoryProductsResponse;
-import com.sopt.bunjang.domain.home.dto.response.SimilarProductsResponse;
 import com.sopt.bunjang.domain.product.dto.response.ProductCardResponse;
 import com.sopt.bunjang.domain.product.dto.response.ProductSimpleCardResponse;
 import com.sopt.bunjang.domain.product.entity.Product;
@@ -27,10 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class HomeService {
 
-    private static final int RECENT_CATEGORY_LIMIT = 4;
-    private static final int SIMILAR_LIMIT = 5;
-    private static final int AD_LIMIT = 4;
-
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final ProductLikeRepository productLikeRepository;
@@ -41,9 +34,9 @@ public class HomeService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // 각 섹션별 상품 조회
-        List<Product> recentCategoryList = productRepository.findBySectionTypeWithLimit(SectionType.RECENT_CATEGORY, RECENT_CATEGORY_LIMIT);
-        List<Product> similarList = productRepository.findBySectionTypeWithLimit(SectionType.SIMILAR_PRODUCT, SIMILAR_LIMIT);
-        List<Product> adList = productRepository.findBySectionTypeWithLimit(SectionType.AD, AD_LIMIT);
+        List<Product> recentCategoryList = productRepository.findBySectionTypeWithLimit(SectionType.RECENT_CATEGORY, 4);
+        List<Product> similarList = productRepository.findBySectionTypeWithLimit(SectionType.SIMILAR_PRODUCT, 5);
+        List<Product> adList = productRepository.findBySectionTypeWithLimit(SectionType.AD, 4);
 
         // 모든 섹션 상품 ID를 합쳐서 찜 여부 한 번에 조회
         List<Long> allProductIds = Stream.of(recentCategoryList, similarList, adList)
@@ -55,7 +48,7 @@ public class HomeService {
         );
 
         // 전체 개수에서 현재 보여주는 개수를 빼서 더보기 카운트 계산
-        Integer remainingCount = Math.max(0, productRepository.countBySectionType(SectionType.RECENT_CATEGORY) - RECENT_CATEGORY_LIMIT);
+        Integer remainingCount = Math.max(0, productRepository.countBySectionType(SectionType.RECENT_CATEGORY) - 4);
 
         return new HomeResponse(
                 buildRecentCategoryProducts(user.getNickname(), recentCategoryList, likedProductIds, remainingCount),
@@ -65,23 +58,24 @@ public class HomeService {
     }
 
     // recentCategoryProducts 섹션 빌드
-    private RecentCategoryProductsResponse buildRecentCategoryProducts(String nickname, List<Product> products, Set<Long> likedProductIds, Integer remainingCount) {
+    private HomeResponse.RecentCategoryProducts buildRecentCategoryProducts(
+            String nickname, List<Product> products, Set<Long> likedProductIds, Integer remainingCount) {
         List<ProductCardResponse> productResponses = toProductCardResponses(products, likedProductIds);
         String categoryName = products.isEmpty() ? null : products.get(0).getCategory().getLabel();
-        return new RecentCategoryProductsResponse(nickname, categoryName, remainingCount, productResponses);
+        return new HomeResponse.RecentCategoryProducts(nickname, categoryName, remainingCount, productResponses);
     }
 
     // similarProducts 섹션 빌드
-    private SimilarProductsResponse buildSimilarProducts(List<Product> products, Set<Long> likedProductIds) {
+    private HomeResponse.SimilarProducts buildSimilarProducts(List<Product> products, Set<Long> likedProductIds) {
         List<ProductSimpleCardResponse> productResponses = toProductSimpleCardResponses(products, likedProductIds);
-        return new SimilarProductsResponse(productResponses);
+        return new HomeResponse.SimilarProducts(productResponses);
     }
 
     // adProducts 섹션 빌드
-    private AdProductsResponse buildAdProducts(List<Product> products, Set<Long> likedProductIds) {
+    private HomeResponse.AdProducts buildAdProducts(List<Product> products, Set<Long> likedProductIds) {
         List<ProductCardResponse> productResponses = toProductCardResponses(products, likedProductIds);
         String categoryName = products.isEmpty() ? null : products.get(0).getCategory().getLabel();
-        return new AdProductsResponse(categoryName, productResponses);
+        return new HomeResponse.AdProducts(categoryName, productResponses);
     }
 
     // Product 리스트 → ProductCardResponse 리스트 변환
