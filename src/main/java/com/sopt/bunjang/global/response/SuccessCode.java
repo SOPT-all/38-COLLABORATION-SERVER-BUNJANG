@@ -9,6 +9,7 @@ public enum SuccessCode {
     HOME_FETCH_SUCCESS("홈 화면 조회에 성공했습니다."),
     EVENT_FETCH_SUCCESS("이벤트 화면 조회에 성공했습니다."),
     PRODUCT_DETAIL_FETCH_SUCCESS("상품 상세 화면 조회에 성공했습니다."),
+    PRODUCT_SECTION_FETCH_SUCCESS("상품 섹션 조회에 성공했습니다."),
     PAYMENT_COMPLETE_FETCH_SUCCESS("결제 완료 화면 조회에 성공했습니다."),
 
     // Action API
